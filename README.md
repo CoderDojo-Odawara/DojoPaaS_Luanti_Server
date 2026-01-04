@@ -28,9 +28,9 @@ READMEに記載の手順どおり、さくらのクラウド上で動作するDo
 ### 必要なファイル類をダウンロード、実行権限付与
 ```shell
 cd ~
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/PaaS_Luanti_Server/main/doitatonce.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/PaaS_Luanti_Server/main/setup_luanti_server.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/PaaS_Luanti_Server/main/startluanti.sh
+curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/doitatonce.sh
+curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/setup_luanti_server.sh
+curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/startluanti.sh
 sudo chmod +x ./doitatonce.sh
 sudo chmod +x ./setup_luanti_server.sh
 sudo chmod +x ./startluanti.sh
