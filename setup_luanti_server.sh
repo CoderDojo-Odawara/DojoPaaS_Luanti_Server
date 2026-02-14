@@ -5,6 +5,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"
 
+# .env があれば読み込み（未設定時はスクリプト内デフォルト値を使用）
+if [[ -f "${SCRIPT_DIR}/.env" ]]; then
+  # shellcheck source=/dev/null
+  source "${SCRIPT_DIR}/.env"
+fi
+
 log() {
   echo "[setup] $*"
 }
@@ -39,6 +45,7 @@ clone_or_update() {
 download_and_extract() {
   local url=$1
   local destination_dir=$2
+  local expected_sha256=${3:-}
 
   mkdir -p "${destination_dir}"
   pushd "${destination_dir}" >/dev/null
@@ -46,6 +53,20 @@ download_and_extract() {
   tmp_archive=$(mktemp)
   log "Downloading ${url}..."
   curl -fsSL "${url}" -o "${tmp_archive}"
+  if [[ -n "${expected_sha256}" ]]; then
+    local actual_sha256
+    actual_sha256=$(sha256sum "${tmp_archive}" | awk '{print $1}')
+    if [[ "${actual_sha256}" != "${expected_sha256}" ]]; then
+      log "ERROR: SHA256 mismatch for ${url}"
+      log "  Expected: ${expected_sha256}"
+      log "  Actual:   ${actual_sha256}"
+      rm -f "${tmp_archive}"
+      exit 1
+    fi
+    log "SHA256 verified: ${actual_sha256}"
+  else
+    log "WARNING: No SHA256 hash provided for ${url}. Skipping verification."
+  fi
   log "Extracting archive in ${destination_dir}..."
   unzip -qo "${tmp_archive}"
   rm -f "${tmp_archive}"
@@ -93,21 +114,40 @@ ninja -C luanti/build
 
 # luanti.confの導入
 log "Luanti.confの配置..."
-curl -fsSLo luanti/luanti.conf https://raw.githubusercontent.com/CoderDojo-Odawara/PaaS_Luanti_Server/main/luanti.conf
+conf_url="${LUANTI_CONF_URL:-https://raw.githubusercontent.com/CoderDojo-Odawara/PaaS_Luanti_Server/main/luanti.conf}"
+conf_sha256="${SHA256_LUANTI_CONF:-}"
+tmp_conf=$(mktemp)
+curl -fsSLo "${tmp_conf}" "${conf_url}"
+if [[ -n "${conf_sha256}" ]]; then
+  actual_conf_sha256=$(sha256sum "${tmp_conf}" | awk '{print $1}')
+  if [[ "${actual_conf_sha256}" != "${conf_sha256}" ]]; then
+    log "ERROR: SHA256 mismatch for ${conf_url}"
+    log "  Expected: ${conf_sha256}"
+    log "  Actual:   ${actual_conf_sha256}"
+    rm -f "${tmp_conf}"
+    exit 1
+  fi
+  log "SHA256 verified: ${actual_conf_sha256}"
+else
+  log "WARNING: No SHA256 hash provided for ${conf_url}. Skipping verification."
+fi
+mv "${tmp_conf}" luanti/luanti.conf
 
 # ゲームとMODのダウンロード (オプション)
 log "ゲームとMODのダウンロード (オプション)..."
-download_and_extract "https://content.luanti.org/packages/ryvnf/mineclonia/download/" "luanti/games"
-download_and_extract "https://content.luanti.org/packages/mt-mods/xcompat/download/" "luanti/mods"
-download_and_extract "https://content.luanti.org/packages/mt-mods/lwscratch/download/" "luanti/mods"
+download_and_extract "${GAME_DOWNLOAD_URL:-https://content.luanti.org/packages/ryvnf/mineclonia/download/}" "luanti/games" "${SHA256_GAME:-}"
+download_and_extract "${MOD_XCOMPAT_URL:-https://content.luanti.org/packages/mt-mods/xcompat/download/}" "luanti/mods" "${SHA256_MOD_XCOMPAT:-}"
+download_and_extract "${MOD_LWSCRATCH_URL:-https://content.luanti.org/packages/mt-mods/lwscratch/download/}" "luanti/mods" "${SHA256_MOD_LWSCRATCH:-}"
 
 # worldの作成とMODの適用設定
 log "worldの作成とMODの適用設定..."
-if [[ ! -d luanti/worlds/world ]]; then
-  timeout -s SIGINT 10 luanti/bin/luantiserver --gameid mineclonia --world luanti/worlds/world --config luanti/luanti.conf || true
+world_name="${LUANTI_WORLD_NAME:-world}"
+game_id="${LUANTI_GAME_ID:-mineclonia}"
+if [[ ! -d "luanti/worlds/${world_name}" ]]; then
+  timeout -s SIGINT 10 luanti/bin/luantiserver --gameid "${game_id}" --world "luanti/worlds/${world_name}" --config luanti/luanti.conf || true
 fi
 
-world_mt="luanti/worlds/world/world.mt"
+world_mt="luanti/worlds/${world_name}/world.mt"
 if [[ -f "${world_mt}" ]]; then
   grep -q '^load_mod_xcompat = true$' "${world_mt}" || echo "load_mod_xcompat = true" >>"${world_mt}"
   grep -q '^load_mod_lwscratch = true$' "${world_mt}" || echo "load_mod_lwscratch = true" >>"${world_mt}"

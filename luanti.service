@@ -1,0 +1,36 @@
+# Luantiサーバー systemd ユニットファイル
+# screen手動運用の代替としてsystemdでサービス管理できます
+#
+# インストール手順:
+#   sudo cp luanti.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable luanti
+#
+# 操作:
+#   sudo systemctl start luanti    - 起動
+#   sudo systemctl stop luanti     - 停止
+#   sudo systemctl status luanti   - 状態確認
+#   journalctl -u luanti -f        - ログ確認
+
+[Unit]
+Description=Luanti Game Server (CoderDojo)
+After=network.target
+
+[Service]
+Type=simple
+# Userは環境に合わせて変更
+User=ubuntu
+# WorkingDirectoryは環境に合わせて変更
+WorkingDirectory=/home/ubuntu/luanti
+# ExecStartのパスは環境に合わせて変更
+# gameid, world名は .env の値に合わせて変更
+ExecStart=/home/ubuntu/luanti/bin/luantiserver --gameid mineclonia --world worlds/world --config ./luanti.conf
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65535
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=luanti
+
+[Install]
+WantedBy=multi-user.target

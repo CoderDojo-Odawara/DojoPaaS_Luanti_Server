@@ -2,6 +2,14 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# .env があれば読み込み（未設定時はスクリプト内デフォルト値を使用）
+if [[ -f "${SCRIPT_DIR}/.env" ]]; then
+  # shellcheck source=/dev/null
+  source "${SCRIPT_DIR}/.env"
+fi
+
 log() {
   echo "[bootstrap] $*"
 }
@@ -52,6 +60,9 @@ ensure_swap() {
 
 open_port() {
   local port=$1
+  # ⚠ 注意: UDP 30000 を広域に開放します
+  # 子ども向けサービスでは、接続元IPを制限することを強く推奨します
+  # IP制限の設定方法は firewall_setup.sh または README.md を参照してください
   if sudo iptables -C INPUT -p udp --dport "${port}" -j ACCEPT 2>/dev/null; then
     log "Firewall already allows UDP port ${port}."
   else
@@ -68,6 +79,6 @@ ensure_swap
 ensure_netfilter_persistent
 
 log "Configuring firewall..."
-open_port 30000
+open_port "${LUANTI_PORT:-30000}"
 
 log "Initialization complete."

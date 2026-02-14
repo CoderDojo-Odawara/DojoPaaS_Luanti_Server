@@ -79,3 +79,33 @@ rm -rf luanti
 #### おまけ
 作成されたworldは　`~/luanti/worlds/world` にあります。  
 こちらをバックアップすることでworldのレストア、移植など可能です。
+
+## 設定のカスタマイズ（.env）
+- `.env.example` をコピーして `.env` を作成
+- ゲームID、ワールド名、ポート、ダウンロードURLなどをカスタマイズ可能
+- `.env` がない場合はデフォルト値で動作
+
+## セキュリティ
+- SHA256ハッシュ検証：外部からダウンロードするファイルの改ざん検知
+- ファイアウォール設定：`firewall_setup.sh` でIP制限（ホワイトリスト方式推奨）
+- 最小権限：デフォルト権限は interact, shout のみ（fly, teleportは管理者付与）
+
+## systemdでのサーバー管理
+- `luanti.service` を `/etc/systemd/system/` にコピー
+- `systemctl start/stop/status luanti` で管理
+- `journalctl -u luanti -f` でログ確認
+- screen手動運用の代替として推奨
+
+## バックアップ
+- `backup_world.sh` でワールドデータを自動バックアップ
+- 世代管理（デフォルト7世代保持）
+- crontab設定例を記載
+
+## CI/CD
+- GitHub Actions で shellcheck + bash -n を自動実行
+- PRマージ前にスクリプト品質を自動チェック
+
+## 安全な環境リセット
+- ⚠ `rm -rf luajit luanti` は全データを削除します
+- 事前に `backup_world.sh` でバックアップを取得してください
+- worldデータ: `~/luanti/worlds/world`
