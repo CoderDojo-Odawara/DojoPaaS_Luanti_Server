@@ -9,7 +9,8 @@ READMEに記載の手順どおり、さくらのクラウド上で動作するDo
   - 2GBのSWAP領域作成
   - inbound UDP 30000の開放
 - Luantiビルド、環境構築(setup_luanti_server.sh)
-  - ゲームはmineclonia
+  - Luanti本体は `testersakage/luanti-jtest` を利用
+  - ゲームは `testersakage/mineclonia-jtest` を利用
   - 適用するMODはLWscratchのみ
   - 作成するワールド名は　`world`
   - ダメージなし、クリエイティブモード適用

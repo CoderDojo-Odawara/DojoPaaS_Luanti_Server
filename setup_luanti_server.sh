@@ -83,7 +83,7 @@ else
 fi
 
 # Luantiの環境構築
-clone_or_update "https://github.com/luanti-org/luanti.git" "luanti" "stable-5"
+clone_or_update "https://github.com/testersakage/luanti-jtest.git" "luanti"
 log "Configuring Luanti build..."
 cmake -S luanti -B luanti/build -G Ninja \
   -DBUILD_CLIENT=0 -DBUILD_SERVER=1 -DRUN_IN_PLACE=1 -DBUILD_UNITTESTS=0 \
@@ -97,7 +97,7 @@ curl -fsSLo luanti/luanti.conf https://raw.githubusercontent.com/CoderDojo-Odawa
 
 # ゲームとMODのダウンロード (オプション)
 log "ゲームとMODのダウンロード (オプション)..."
-download_and_extract "https://content.luanti.org/packages/ryvnf/mineclonia/download/" "luanti/games"
+clone_or_update "https://github.com/testersakage/mineclonia-jtest.git" "luanti/games/mineclonia"
 download_and_extract "https://content.luanti.org/packages/mt-mods/xcompat/download/" "luanti/mods"
 download_and_extract "https://content.luanti.org/packages/mt-mods/lwscratch/download/" "luanti/mods"
 
