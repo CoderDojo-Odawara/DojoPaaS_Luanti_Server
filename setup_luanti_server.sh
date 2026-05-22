@@ -86,7 +86,7 @@ fi
 clone_or_update "https://github.com/testersakage/luanti-jtest.git" "luanti"
 log "Configuring Luanti build..."
 cmake -S luanti -B luanti/build -G Ninja \
-  -DBUILD_CLIENT=0 -DBUILD_SERVER=1 -DRUN_IN_PLACE=1 -DBUILD_UNITTESTS=0 -DENABLE_UTF8_SDL2_ATLAS=ON \
+  -DBUILD_CLIENT=0 -DBUILD_SERVER=1 -DRUN_IN_PLACE=1 -DBUILD_UNITTESTS=0 \
   -DLUA_INCLUDE_DIR="${SCRIPT_DIR}/luajit/src/" -DLUA_LIBRARY="${SCRIPT_DIR}/luajit/src/libluajit.a"
 log "Building Luanti..."
 ninja -C luanti/build
