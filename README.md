@@ -15,7 +15,7 @@
   - ダメージなし、クリエイティブモード適用
   - ユーザーに付与される権限は標準権限＋ fly, teleport, fast
   - 時間経過なし
-  - [champion] の名前でユーザーを作成するとadmin権限を持つ
+  - `champion` の名前でユーザーを作成するとadmin権限を持つ
 - Luantiサーバーの起動管理(startluanti.sh)
 
 
