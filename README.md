@@ -13,8 +13,9 @@
   - 適用するMODはLWscratchとUnicode Signs（依存MODを含む）
   - 作成するワールド名は　`world`
   - ダメージなし、クリエイティブモード適用
-  - ユーザーに付与される権限は標準権限＋ fly, teleport
+  - ユーザーに付与される権限は標準権限＋ fly, teleport, fast
   - 時間経過なし
+  - [champion] の名前でユーザーを作成するとadmin権限を持つ
 - Luantiサーバーの起動管理(startluanti.sh)
 
 
