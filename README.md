@@ -10,7 +10,7 @@ READMEに記載の手順どおり、さくらのクラウド上で動作するDo
   - inbound UDP 30000の開放
 - Luantiビルド、環境構築(setup_luanti_server.sh)
   - ゲームはmineclonia
-  - 適用するMODはLWscratchのみ
+  - 適用するMODはLWscratchとUnicode Signs（依存MODを含む）
   - 作成するワールド名は　`world`
   - ダメージなし、クリエイティブモード適用
   - ユーザーに付与される権限は標準権限＋ fly, teleport

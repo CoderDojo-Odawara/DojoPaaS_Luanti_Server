@@ -101,6 +101,14 @@ download_and_extract() {
   popd >/dev/null
 }
 
+enable_world_mod() {
+  local world_file=$1
+  local mod_name=$2
+  local setting="load_mod_${mod_name} = true"
+
+  grep -Fqx "${setting}" "${world_file}" || echo "${setting}" >>"${world_file}"
+}
+
 # 依存パッケージの準備
 log "依存パッケージの確認..."
 readarray -t packages < <(printf '%s\n' \
@@ -149,6 +157,8 @@ log "ゲームとMODのダウンロード (オプション)..."
 download_and_extract "https://content.luanti.org/packages/ryvnf/mineclonia/download/" "luanti/games"
 download_and_extract "https://content.luanti.org/packages/mt-mods/xcompat/download/" "luanti/mods"
 download_and_extract "https://content.luanti.org/packages/mt-mods/lwscratch/download/" "luanti/mods"
+download_and_extract "https://content.luanti.org/packages/cora/unicode_text/download/" "luanti/mods"
+download_and_extract "https://content.luanti.org/packages/cora/ucsigns/download/" "luanti/mods"
 
 # worldの作成とMODの適用設定
 log "worldの作成とMODの適用設定..."
@@ -173,8 +183,10 @@ fi
 
 world_mt="luanti/worlds/world/world.mt"
 if [[ -f "${world_mt}" ]]; then
-  grep -q '^load_mod_xcompat = true$' "${world_mt}" || echo "load_mod_xcompat = true" >>"${world_mt}"
-  grep -q '^load_mod_lwscratch = true$' "${world_mt}" || echo "load_mod_lwscratch = true" >>"${world_mt}"
+  enable_world_mod "${world_mt}" xcompat
+  enable_world_mod "${world_mt}" lwscratch
+  enable_world_mod "${world_mt}" unicode_text
+  enable_world_mod "${world_mt}" ucsigns
 fi
 
 log "完了！ startluanti.shを実行してサーバーを起動してください。"
