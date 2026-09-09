@@ -5,6 +5,55 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"
 
+world_seed=""
+
+usage() {
+  cat <<'EOF'
+Usage: ./setup_luanti_server.sh [--seed SEED]
+
+Options:
+  --seed SEED  新規ワールドの生成に使用するseed値（文字列または数値）
+  -h, --help   このヘルプを表示
+EOF
+}
+
+while (($# > 0)); do
+  case $1 in
+    --seed)
+      if (($# < 2)) || [[ -z $2 ]]; then
+        echo "エラー: --seedには値を指定してください。" >&2
+        usage >&2
+        exit 2
+      fi
+      world_seed=$2
+      shift 2
+      ;;
+    --seed=*)
+      world_seed=${1#*=}
+      if [[ -z ${world_seed} ]]; then
+        echo "エラー: --seedには値を指定してください。" >&2
+        usage >&2
+        exit 2
+      fi
+      shift
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "エラー: 不明なオプションです: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ ${world_seed} == *$'\n'* || ${world_seed} == *$'\r'* ]]; then
+  echo "エラー: seed値に改行は使用できません。" >&2
+  exit 2
+fi
+
 log() {
   echo "[setup] $*"
 }
@@ -50,6 +99,14 @@ download_and_extract() {
   unzip -qo "${tmp_archive}"
   rm -f "${tmp_archive}"
   popd >/dev/null
+}
+
+enable_world_mod() {
+  local world_file=$1
+  local mod_name=$2
+  local setting="load_mod_${mod_name} = true"
+
+  grep -Fqx "${setting}" "${world_file}" || echo "${setting}" >>"${world_file}"
 }
 
 # 依存パッケージの準備
@@ -100,17 +157,36 @@ log "ゲームとMODのダウンロード (オプション)..."
 download_and_extract "https://content.luanti.org/packages/ryvnf/mineclonia/download/" "luanti/games"
 download_and_extract "https://content.luanti.org/packages/mt-mods/xcompat/download/" "luanti/mods"
 download_and_extract "https://content.luanti.org/packages/mt-mods/lwscratch/download/" "luanti/mods"
+download_and_extract "https://content.luanti.org/packages/cora/unicode_text/download/" "luanti/mods"
+download_and_extract "https://content.luanti.org/packages/cora/ucsigns/download/" "luanti/mods"
 
 # worldの作成とMODの適用設定
 log "worldの作成とMODの適用設定..."
 if [[ ! -d luanti/worlds/world ]]; then
-  timeout -s SIGINT 10 luanti/bin/luantiserver --gameid mineclonia --world luanti/worlds/world --config luanti/luanti.conf || true
+  world_config="luanti/luanti.conf"
+  temporary_config=""
+  if [[ -n ${world_seed} ]]; then
+    temporary_config=$(mktemp)
+    cp "${world_config}" "${temporary_config}"
+    printf '\nfixed_map_seed = %s\n' "${world_seed}" >>"${temporary_config}"
+    world_config=${temporary_config}
+    log "指定されたseed値でworldを作成します: ${world_seed}"
+  else
+    log "ランダムなseed値でworldを作成します。"
+  fi
+
+  timeout -s SIGINT 10 luanti/bin/luantiserver --gameid mineclonia --world luanti/worlds/world --config "${world_config}" || true
+  [[ -z ${temporary_config} ]] || rm -f "${temporary_config}"
+elif [[ -n ${world_seed} ]]; then
+  log "worldは既に存在するため、指定されたseed値は適用されません。"
 fi
 
 world_mt="luanti/worlds/world/world.mt"
 if [[ -f "${world_mt}" ]]; then
-  grep -q '^load_mod_xcompat = true$' "${world_mt}" || echo "load_mod_xcompat = true" >>"${world_mt}"
-  grep -q '^load_mod_lwscratch = true$' "${world_mt}" || echo "load_mod_lwscratch = true" >>"${world_mt}"
+  enable_world_mod "${world_mt}" xcompat
+  enable_world_mod "${world_mt}" lwscratch
+  enable_world_mod "${world_mt}" unicode_text
+  enable_world_mod "${world_mt}" ucsigns
 fi
 
 log "完了！ startluanti.shを実行してサーバーを起動してください。"

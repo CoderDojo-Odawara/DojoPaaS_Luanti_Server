@@ -10,7 +10,7 @@ READMEに記載の手順どおり、さくらのクラウド上で動作するDo
   - inbound UDP 30000の開放
 - Luantiビルド、環境構築(setup_luanti_server.sh)
   - ゲームはmineclonia
-  - 適用するMODはLWscratchのみ
+  - 適用するMODはLWscratchとUnicode Signs（依存MODを含む）
   - 作成するワールド名は　`world`
   - ダメージなし、クリエイティブモード適用
   - ユーザーに付与される権限は標準権限＋ fly, teleport
@@ -44,6 +44,15 @@ rm ./doitatonce.sh
 ```shell
 ./setup_luanti_server.sh
 ```
+
+新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
+
+```shell
+./setup_luanti_server.sh --seed 12345
+```
+
+seed値には文字列または数値を指定できます。`--seed`を省略した場合はランダムなseed値が使用されます。
+既に`~/luanti/worlds/world`が存在する場合、指定したseed値は適用されません。seed値を指定して作り直す場合は、必要に応じて既存ワールドをバックアップしてから削除してください。
 
 
 ### Luantiサーバ起動
