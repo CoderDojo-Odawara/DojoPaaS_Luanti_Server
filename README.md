@@ -39,9 +39,9 @@ rm ./doitatonce.sh
 ```shell
 ./setup_luanti_server.sh
 ```
+途中で本リポジトリからluanti.confをコピーします。
 
-新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
-
+また、新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
 ```shell
 ./setup_luanti_server.sh --seed apple
 ```
