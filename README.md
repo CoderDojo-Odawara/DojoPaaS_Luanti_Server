@@ -43,7 +43,7 @@ rm ./doitatonce.sh
 新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
 
 ```shell
-./setup_luanti_server.sh --seed 12345
+./setup_luanti_server.sh --seed apple
 ```
 
 seed値には文字列または数値を指定できます。`--seed`を省略した場合はランダムなseed値が使用されます。
