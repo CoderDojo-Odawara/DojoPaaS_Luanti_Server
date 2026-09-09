@@ -64,14 +64,6 @@ screen -r luanti
 ```
 でスクリーンに入って`Ctrl+C`。なんか良く分からん、となったら `sudo reboot`でも良いっちゃ良い。
 
-
-### 各種環境のバージョンUPをしたいのであれば。。。
-Luantiサーバが停止している状態で再度
-```shell
-./setup_luanti_server.sh
-```
-でOK(のはず)。
-
 ### 環境を一から作り直したいのであれば。。。
 Luantiサーバが停止している状態で
 ```shell
