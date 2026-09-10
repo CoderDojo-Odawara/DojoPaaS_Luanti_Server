@@ -157,7 +157,7 @@ log "ゲームとMODのダウンロード (オプション)..."
 download_and_extract "https://content.luanti.org/packages/ryvnf/mineclonia/download/" "luanti/games"
 download_and_extract "https://content.luanti.org/packages/mt-mods/xcompat/download/" "luanti/mods"
 download_and_extract "https://content.luanti.org/packages/mt-mods/lwscratch/download/" "luanti/mods"
-download_and_extract "https://content.luanti.org/packages/cora/unicode_text/download/" "luanti/mods"
+download_and_extract "https://content.luanti.org/packages/erlehmann/unicode_text/download/" "luanti/mods"
 download_and_extract "https://content.luanti.org/packages/cora/ucsigns/download/" "luanti/mods"
 
 # worldの作成とMODの適用設定
