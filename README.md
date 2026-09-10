@@ -36,11 +36,11 @@ sudo chmod +x ./startluanti.sh
 ./doitatonce.sh
 rm ./doitatonce.sh
 ```
-### Luanti環境構築(シングルコアなので時間がかかる。焦らず終わるまで待つ)
+### Luanti環境構築(時間がかかる。焦らず終わるまで待つ)
 ```shell
 ./setup_luanti_server.sh
 ```
-途中で本リポジトリからluanti.confをコピーします。
+※途中で本リポジトリからluanti.confをコピーします。
 
 また、新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
 ```shell
