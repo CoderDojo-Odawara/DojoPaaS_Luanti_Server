@@ -1,4 +1,4 @@
-# PaaS_Luanti_Server
+# DojoPaaS_Luanti_Server
 さくらインターネットとCoderDojo Japanから提供されている[DojoPaaS](https://github.com/coderdojo-japan/dojopaas)
 にLuanti Serverを自動構築するためのスクリプト
 
