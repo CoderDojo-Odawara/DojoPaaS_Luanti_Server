@@ -27,9 +27,7 @@ cd ~
 curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/doitatonce.sh
 curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/setup_luanti_server.sh
 curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/startluanti.sh
-sudo chmod +x ./doitatonce.sh
-sudo chmod +x ./setup_luanti_server.sh
-sudo chmod +x ./startluanti.sh
+chmod +x doitatonce.sh setup_luanti_server.sh startluanti.sh
 ```
 ### SWAP領域作成 UDP 30000開放（実行後shファイルを削除するのが無難）
 ```shell
