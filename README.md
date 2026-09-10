@@ -31,7 +31,7 @@ sudo chmod +x ./doitatonce.sh
 sudo chmod +x ./setup_luanti_server.sh
 sudo chmod +x ./startluanti.sh
 ```
-### SWAP領域作成 UDP 30000開放（ここはサーバーを建ててから一回のみでOKなのでshファイルを削除するのが無難）
+### SWAP領域作成 UDP 30000開放（実行後shファイルを削除するのが無難）
 ```shell
 ./doitatonce.sh
 rm ./doitatonce.sh
