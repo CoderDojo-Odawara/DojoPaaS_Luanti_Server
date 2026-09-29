@@ -19,7 +19,7 @@
 - Luantiサーバーの起動管理(startluanti.sh)
   - ScreenのLuanti内でサーバー実行
 - Luantiサーバーのsystemd化(setup_luanti_systemd.sh)  
-  - OS起動時、維持用終了時等に自動起動するようにする
+  - OS起動時、異常終了時等に自動起動するようにする
 - Luantiサーバーのsystemd化解除(remove_luanti_systemd.sh)
   - systemdの停止とサービス削除処理をする
 
