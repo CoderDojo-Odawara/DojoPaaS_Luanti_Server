@@ -49,6 +49,7 @@ Type=simple
 User=$run_user
 WorkingDirectory="$luanti_dir"
 ExecStart="$luanti_dir/bin/luantiserver" --gameid mineclonia --world "$luanti_dir/worlds/world" --config "$luanti_dir/luanti.conf"
+# 異常終了時にリスタートするようにしておく
 Restart=on-failure
 RestartSec=10
 KillSignal=SIGINT
