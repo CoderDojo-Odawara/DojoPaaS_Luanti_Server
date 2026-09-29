@@ -17,6 +17,19 @@
   - 時間経過なし
   - `champion` の名前でユーザーを作成するとadmin権限を持つ
 - Luantiサーバーの起動管理(startluanti.sh)
+　- ScreenのLuanti内でサーバー実行
+- Luantiサーバーのsystemd化
+  - OS起動時、維持用終了時等に自動起動するようにする
+
+
+操作	コマンド
+停止	sudo systemctl stop luanti
+起動	sudo systemctl start luanti
+再起動	sudo systemctl restart luanti
+ログをリアルタイムで確認	sudo journalctl -u luanti -f
+自動起動を解除して停止	sudo systemctl disable --now luanti
+
+
 
 
 ## 手順
