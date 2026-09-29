@@ -11,7 +11,8 @@ command -v systemctl >/dev/null || fail "systemdが必要です。"
 command -v pgrep >/dev/null || fail "pgrepが必要です（Ubuntuではprocpsパッケージ）。"
 command -v systemd-analyze >/dev/null || fail "systemd-analyzeが必要です。"
 
-luanti_dir=$(cd -- "${1:-.}" && pwd -P)
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+luanti_dir=$(cd -- "${1:-$script_dir/luanti}" && pwd -P)
 run_user=${SUDO_USER:-$(id -un)}
 [[ "$run_user" != root ]] || fail "root以外の実行ユーザーで bash により実行してください。"
 # unitファイルで特殊な意味を持つ文字を避けます。空白は利用できます。
