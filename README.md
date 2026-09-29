@@ -22,12 +22,7 @@
   - OS起動時、維持用終了時等に自動起動するようにする  
 
 
-操作	コマンド
-停止	sudo systemctl stop luanti
-起動	sudo systemctl start luanti
-再起動	sudo systemctl restart luanti
-ログをリアルタイムで確認	sudo journalctl -u luanti -f
-自動起動を解除して停止	sudo systemctl disable --now luanti
+
 
 
 
@@ -62,7 +57,7 @@ seed値には文字列または数値を指定できます。`--seed`を省略�
 既に`~/luanti/worlds/world`が存在する場合、指定したseed値は適用されません。seed値を指定して作り直す場合は、必要に応じて既存ワールドをバックアップしてから削除してください。
 
 
-### Luantiサーバ起動
+### Luantiサーバ起動(一時使用向け)
 ```shell
 ./startluanti.sh
 ```
@@ -74,6 +69,18 @@ Luanti側からサーバーにアクセスできることを確認できたらSS
 screen -r luanti
 ```
 でスクリーンに入って`Ctrl+C`。なんか良く分からん、となったら `sudo reboot`でも良いっちゃ良い。
+
+### systemd化(長期運用向け)  
+```shell
+./setup_luanti_systemd.sh
+```
+管理コマンドは以下の通り  
+| 操作           | コマンド                          |
+| ------------ | ----------------------------- |
+| 停止           | sudo systemctl stop luanti    |
+| 起動           | sudo systemctl start luanti   |
+| 再起動          | sudo systemctl restart luanti |
+| ログをリアルタイムで確認 | sudo journalctl -u luanti -f  |
 
 ### 環境を一から作り直したいのであれば。。。
 Luantiサーバが停止している状態で
