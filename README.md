@@ -84,7 +84,7 @@ cd ~
 | 再起動          | sudo systemctl restart luanti |
 | ログをリアルタイムで確認 | sudo journalctl -u luanti -f  |
 
-###　systemd化解除
+### systemd化解除
 ```shell
 cd ~
 ./remove_luanti_systemd.sh
