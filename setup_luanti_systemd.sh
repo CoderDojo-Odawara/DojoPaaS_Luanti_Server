@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Ubuntu/systemd用。Luantiを起動していたディレクトリで bash により実行。
-# 任意で第1引数にLuantiのディレクトリを指定できます。
 set -Eeuo pipefail
 trap 'echo "設定に失敗しました。表示されたエラーを確認してください。" >&2' ERR
 
