@@ -19,12 +19,9 @@
 - Luantiサーバーの起動管理(startluanti.sh)
   - ScreenのLuanti内でサーバー実行
 - Luantiサーバーのsystemd化(setup_luanti_systemd.sh)  
-  - OS起動時、維持用終了時等に自動起動するようにする  
-
-
-
-
-
+  - OS起動時、維持用終了時等に自動起動するようにする
+- Luantiサーバーのsystemd化解除(remove_luanti_systemd.sh)
+  - systemdの停止とサービス削除処理をする
 
 
 ## 手順
@@ -81,6 +78,11 @@ screen -r luanti
 | 起動           | sudo systemctl start luanti   |
 | 再起動          | sudo systemctl restart luanti |
 | ログをリアルタイムで確認 | sudo journalctl -u luanti -f  |
+
+###　systemd化解除
+```shell
+./remove_luanti_systemd.sh
+```
 
 ### 環境を一から作り直したいのであれば。。。
 Luantiサーバが停止している状態で
