@@ -27,9 +27,9 @@ if [[ ! -e "$unit_path" && ! -L "$unit_path" ]]; then
 fi
 [[ ! -L "$unit_path" && -f "$unit_path" ]] || fail "サービス設定が通常ファイルではないため、変更せず終了します。"
 
-backup_path="$unit_path.bak.$(date +%Y%m%d-%H%M%S).$$"
-"${admin[@]}" cp -p -- "$unit_path" "$backup_path"
-echo "サービス設定をバックアップしました: $backup_path"
+#backup_path="$unit_path.bak.$(date +%Y%m%d-%H%M%S).$$"
+#"${admin[@]}" cp -p -- "$unit_path" "$backup_path"
+#echo "サービス設定をバックアップしました: $backup_path"
 
 # 通常終了を待ってから、起動設定とサービスファイルを解除します。
 "${admin[@]}" systemctl stop luanti.service
