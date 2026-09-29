@@ -29,24 +29,27 @@
 ### 必要なファイル類をダウンロード、実行権限付与
 ```shell
 cd ~
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/doitatonce.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/setup_luanti_server.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/startluanti.sh
-chmod +x doitatonce.sh setup_luanti_server.sh startluanti.sh
+for file in doitatonce.sh setup_luanti_server.sh startluanti.sh setup_luanti_systemd.sh remove_luanti_systemd.sh; do
+  curl -fLO "https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/$file" || break
+  chmod +x "$file"
+done
 ```
 ### SWAP領域作成 UDP 30000開放（実行後shファイルを削除するのが無難）
 ```shell
+cd ~
 ./doitatonce.sh
 rm ./doitatonce.sh
 ```
 ### Luanti環境構築(時間がかかる。焦らず終わるまで待つ)
 ```shell
+cd ~
 ./setup_luanti_server.sh
 ```
 ※途中で本リポジトリからluanti.confをコピーします。
 
 また、新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
 ```shell
+cd ~
 ./setup_luanti_server.sh --seed apple
 ```
 
@@ -56,6 +59,7 @@ seed値には文字列または数値を指定できます。`--seed`を省略�
 
 ### Luantiサーバ起動(一時使用向け)
 ```shell
+cd ~
 ./startluanti.sh
 ```
 
@@ -69,6 +73,7 @@ screen -r luanti
 
 ### systemd化(長期運用向け)  
 ```shell
+cd ~
 ./setup_luanti_systemd.sh
 ```
 管理コマンドは以下の通り  
@@ -81,12 +86,14 @@ screen -r luanti
 
 ###　systemd化解除
 ```shell
+cd ~
 ./remove_luanti_systemd.sh
 ```
 
 ### 環境を一から作り直したいのであれば。。。
 Luantiサーバが停止している状態で
 ```shell
+cd ~
 rm -rf luajit
 rm -rf luanti
 ./setup_luanti_server.sh
