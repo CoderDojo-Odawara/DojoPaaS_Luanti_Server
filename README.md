@@ -31,8 +31,7 @@
 cd ~
 for file in doitatonce.sh setup_luanti_server.sh startluanti.sh setup_luanti_systemd.sh remove_luanti_systemd.sh
 do
-  curl -fLO "https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/$file" \
-    || break
+  curl -fLO "https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/$file" || break
   chmod +x "$file" || break
 done
 ```
