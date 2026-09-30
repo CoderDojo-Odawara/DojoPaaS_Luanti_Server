@@ -101,6 +101,5 @@ rm -rf luanti
 
 #### おまけ
 - 作成されたworldは　`~/luanti/worlds/world` にあります。こちらをバックアップすることでworldのレストア、移植など可能です。
-- mobの自然沸きを抑えたい場合には~/luanti/luanti.conf に　`mobs_spawn = false`を追記してサーバー再起動
-  　-　ただし既に沸いているmobは消えないのでadminユーザーでログインしたのちに `/clearobjects full` を発行すること。
-
+- mobの自然沸きを抑えたい場合には~/luanti/luanti.conf に　`mobs_spawn = false`を追記してサーバー再起動  
+  - ただし既に沸いているmobは消えないのでadminユーザーでログインしたのちに `/clearobjects full` を発行すること。
