@@ -17,6 +17,11 @@
   - 時間経過なし
   - `champion` の名前でユーザーを作成するとadmin権限を持つ
 - Luantiサーバーの起動管理(startluanti.sh)
+  - ScreenのLuanti内でサーバー実行
+- Luantiサーバーのsystemd化(setup_luanti_systemd.sh)  
+  - OS起動時、異常終了時等に自動起動するようにする
+- Luantiサーバーのsystemd化解除(remove_luanti_systemd.sh)
+  - systemdの停止とサービス削除処理をする
 
 
 ## 手順
@@ -24,24 +29,28 @@
 ### 必要なファイル類をダウンロード、実行権限付与
 ```shell
 cd ~
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/doitatonce.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/setup_luanti_server.sh
-curl -O https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/startluanti.sh
-chmod +x doitatonce.sh setup_luanti_server.sh startluanti.sh
+for file in doitatonce.sh setup_luanti_server.sh startluanti.sh setup_luanti_systemd.sh remove_luanti_systemd.sh
+do
+  curl -fLO "https://raw.githubusercontent.com/CoderDojo-Odawara/DojoPaaS_Luanti_Server/main/$file" || break
+  chmod +x "$file" || break
+done
 ```
 ### SWAP領域作成 UDP 30000開放（実行後shファイルを削除するのが無難）
 ```shell
+cd ~
 ./doitatonce.sh
 rm ./doitatonce.sh
 ```
 ### Luanti環境構築(時間がかかる。焦らず終わるまで待つ)
 ```shell
+cd ~
 ./setup_luanti_server.sh
 ```
 ※途中で本リポジトリからluanti.confをコピーします。
 
 また、新しく作成するワールドのseed値を指定する場合は、`--seed`オプションを使用します。
 ```shell
+cd ~
 ./setup_luanti_server.sh --seed apple
 ```
 
@@ -49,13 +58,13 @@ seed値には文字列または数値を指定できます。`--seed`を省略�
 既に`~/luanti/worlds/world`が存在する場合、指定したseed値は適用されません。seed値を指定して作り直す場合は、必要に応じて既存ワールドをバックアップしてから削除してください。
 
 
-### Luantiサーバ起動
+### Luantiサーバ起動(一時使用向け)
 ```shell
+cd ~
 ./startluanti.sh
 ```
 
-Luantiサーバが立ち上がったらキーボードの　`Ctrl+A -> D`と順番にタイプすることででスクリーン離脱。
-ここまできたらSSH接続を切ってもOK。
+Luanti側からサーバーにアクセスできることを確認できたらSSH接続を切ってもOK。
 
 サーバーを止める場合には
 ```shell
@@ -63,14 +72,35 @@ screen -r luanti
 ```
 でスクリーンに入って`Ctrl+C`。なんか良く分からん、となったら `sudo reboot`でも良いっちゃ良い。
 
+### systemd化(長期運用向け)  
+```shell
+cd ~
+./setup_luanti_systemd.sh
+```
+管理コマンドは以下の通り  
+| 操作           | コマンド                          |
+| ------------ | ----------------------------- |
+| 停止           | sudo systemctl stop luanti    |
+| 起動           | sudo systemctl start luanti   |
+| 再起動          | sudo systemctl restart luanti |
+| ログをリアルタイムで確認 | sudo journalctl -u luanti -f  |
+
+### systemd化解除
+```shell
+cd ~
+./remove_luanti_systemd.sh
+```
+
 ### 環境を一から作り直したいのであれば。。。
 Luantiサーバが停止している状態で
 ```shell
+cd ~
 rm -rf luajit
 rm -rf luanti
 ./setup_luanti_server.sh
 ```
 
 #### おまけ
-作成されたworldは　`~/luanti/worlds/world` にあります。  
-こちらをバックアップすることでworldのレストア、移植など可能です。
+- 作成されたworldは　`~/luanti/worlds/world` にあります。こちらをバックアップすることでworldのレストア、移植など可能です。
+- mobの自然沸きを抑えたい場合には~/luanti/luanti.conf に　`mobs_spawn = false`を追記してサーバー再起動  
+  - ただし既に沸いているmobは消えないのでadminユーザーでログインしたのちに `/clearobjects full` を発行すること。
