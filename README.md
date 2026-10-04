@@ -58,7 +58,7 @@ seed値には文字列または数値を指定できます。`--seed`を省略�
 既に`~/luanti/worlds/world`が存在する場合、指定したseed値は適用されません。seed値を指定して作り直す場合は、必要に応じて既存ワールドをバックアップしてから削除してください。
 
 
-### Luantiサーバ起動(一時使用向け)
+### Luantiサーバ起動1:Luanti screen内で起動
 ```shell
 cd ~
 ./startluanti.sh
@@ -72,7 +72,7 @@ screen -r luanti
 ```
 でスクリーンに入って`Ctrl+C`。なんか良く分からん、となったら `sudo reboot`でも良いっちゃ良い。
 
-### systemd化(長期運用向け)  
+### Luantiサーバ起動2:systemd化して自動起動
 ```shell
 cd ~
 ./setup_luanti_systemd.sh
